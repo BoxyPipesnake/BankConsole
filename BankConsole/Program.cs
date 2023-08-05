@@ -1,4 +1,5 @@
 ﻿using BankConsole;
+using System.Text.RegularExpressions;
 
 if (args.Length == 0)
     EmailService.SendEmail();
@@ -53,11 +54,41 @@ void CreateUser()
     Console.Write("Nombre: ");
     string name = Console.ReadLine();
 
-    Console.Write("Email: ");
-    string email = Console.ReadLine();
 
-    Console.Write("Saldo: ");
-    decimal balance = decimal.Parse(Console.ReadLine());
+
+    string email;
+    do
+     {
+        Console.Write("Email: ");
+        email = Console.ReadLine();
+
+        if (!validateEmail(email))
+        {
+            Console.WriteLine("El formato del correo electrónico no es valido. Ej: goku@gmail.com");
+        }
+        else 
+            break;
+            
+    } while (true);
+
+
+    decimal balance;
+
+    do
+    {
+        Console.Write("Saldo: ");
+        string input = Console.ReadLine();
+
+        if (decimal.TryParse(input, out balance) && balance >= 0)
+        {
+            break;
+        }
+        else
+        {
+            Console.WriteLine("El saldo debe ser un número decimal positivo.");
+        }
+    } while (true);
+
 
     Console.Write("Escribe 'c' si el usuario es Cliente, 'e' si es Empleado: ");
     char userType = char.Parse(Console.ReadLine());
@@ -101,5 +132,14 @@ void DeleteUser()
         ShowMenu();
     }
 
+}
 
+
+// Validations
+
+bool validateEmail(string email)
+{
+
+    string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$";
+    return Regex.IsMatch(email, pattern);
 }
