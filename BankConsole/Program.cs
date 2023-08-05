@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 if (args.Length == 0)
     EmailService.SendEmail();
-else 
+else
     ShowMenu();
 
 void ShowMenu()
@@ -15,25 +15,24 @@ void ShowMenu()
     Console.WriteLine("3 - Salir.");
 
     int option = 0;
-    
     do
     {
         string input = Console.ReadLine();
 
-        if(!int.TryParse(input, out option))
+        if (!int.TryParse(input, out option))
             Console.WriteLine("Debes Ingresar un numero (1, 2 o 3).");
-        else if(option > 3)
+        else if (option > 3)
             Console.WriteLine("Debes Ingresar un numero (1, 2 o 3).");
 
     }
-    while(option == 0 || option > 3);
+    while (option == 0 || option > 3);
 
-    switch(option)
+    switch (option)
     {
         case 1:
             CreateUser();
             break;
-        case 2: 
+        case 2:
             DeleteUser();
             break;
         case 3:
@@ -58,7 +57,7 @@ void CreateUser()
 
     string email;
     do
-     {
+    {
         Console.Write("Email: ");
         email = Console.ReadLine();
 
@@ -66,9 +65,9 @@ void CreateUser()
         {
             Console.WriteLine("El formato del correo electrónico no es valido. Ej: goku@gmail.com");
         }
-        else 
+        else
             break;
-            
+
     } while (true);
 
 
@@ -90,20 +89,32 @@ void CreateUser()
     } while (true);
 
 
-    Console.Write("Escribe 'c' si el usuario es Cliente, 'e' si es Empleado: ");
-    char userType = char.Parse(Console.ReadLine());
+    char userType;
+
+    do
+    {
+        Console.Write("Escribe 'c' si el usuario es Cliente, 'e' si es Empleado: ");
+        userType = Console.ReadKey().KeyChar;
+
+        if (userType != 'c' && userType != 'e')
+        {
+            Console.WriteLine("\n******Intentalo nuevamente.******");
+        }
+    } while (userType != 'c' && userType != 'e');
+
 
     User newUser;
 
-    if(userType.Equals('c'))
+    if (userType.Equals('c'))
     {
-        Console.Write("Regimen fiscal: ");
+        Console.Write("\n\nRegimen fiscal: ");
         char taxRegime = char.Parse(Console.ReadLine());
 
         newUser = new Client(ID, name, email, balance, taxRegime);
     }
-    else {
-        Console.Write("Departamento: ");
+    else
+    {
+        Console.Write("\n\nDepartamento: ");
         string department = Console.ReadLine();
 
         newUser = new Employee(ID, name, email, balance, department);
