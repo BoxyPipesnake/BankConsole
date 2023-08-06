@@ -47,8 +47,19 @@ void CreateUser()
     Console.Clear();
     Console.WriteLine("Ingrese la informacion del usuario:");
 
+    int ID;
     Console.Write("ID: ");
-    int ID = int.Parse(Console.ReadLine());
+    do
+    {
+        string input = Console.ReadLine();
+
+        if(!int.TryParse(input, out ID) || ID <= 0)
+            Console.Write("No es un ID valido, intentalo nuevamente: ");
+        else if(Storage.IsUserIDTaken(ID))
+            Console.Write($"El ID {ID} ya ha sido tomado, elige otro: ");
+        
+    } while (ID <= 0 || Storage.IsUserIDTaken(ID));
+
 
     Console.Write("Nombre: ");
     string name = Console.ReadLine();

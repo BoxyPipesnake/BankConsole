@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BankConsole;
 
-public static class Storage 
+public static class Storage
 {
     static string filePath = AppDomain.CurrentDomain.BaseDirectory + @"\users.json";
 
@@ -11,18 +11,18 @@ public static class Storage
     {
         string json = "", usersInFile = "";
 
-        if(File.Exists(filePath))
+        if (File.Exists(filePath))
             usersInFile = File.ReadAllText(filePath);
 
         var listUsers = JsonConvert.DeserializeObject<List<object>>(usersInFile);
 
 
-        if(listUsers == null)
+        if (listUsers == null)
             listUsers = new List<object>();
 
         listUsers.Add(user);
 
-        JsonSerializerSettings settings = new JsonSerializerSettings {Formatting = Formatting.Indented };
+        JsonSerializerSettings settings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
         json = JsonConvert.SerializeObject(listUsers, settings);
 
@@ -35,12 +35,12 @@ public static class Storage
         string usersInFile = "";
         var listUsers = new List<User>();
 
-         if(File.Exists(filePath))
+        if (File.Exists(filePath))
             usersInFile = File.ReadAllText(filePath);
 
         var listObjects = JsonConvert.DeserializeObject<List<object>>(usersInFile);
 
-        if(listObjects == null)
+        if (listObjects == null)
             return listUsers;
 
         foreach (object obj in listObjects)
@@ -48,7 +48,7 @@ public static class Storage
             User newUser;
             JObject user = (JObject)obj;
 
-            if(user.ContainsKey("TaxRegime"))
+            if (user.ContainsKey("TaxRegime"))
                 newUser = user.ToObject<Client>();
             else
                 newUser = user.ToObject<Employee>();
@@ -59,8 +59,8 @@ public static class Storage
         var newUsersList = listUsers.Where(user => user.GetRegisterDate().Date.Equals(DateTime.Today)).ToList();
 
         return newUsersList;
-        
-   }
+
+    }
 
     public static string DeleteUser(int ID)
     {
@@ -68,12 +68,12 @@ public static class Storage
         string usersInFile = "";
         var listUsers = new List<User>();
 
-        if(File.Exists(filePath))
+        if (File.Exists(filePath))
             usersInFile = File.ReadAllText(filePath);
 
         var listObjects = JsonConvert.DeserializeObject<List<object>>(usersInFile);
 
-        if(listObjects == null)
+        if (listObjects == null)
             return "There are no users in the file.";
 
         foreach (object obj in listObjects)
@@ -81,9 +81,9 @@ public static class Storage
             User newUser;
             JObject user = (JObject)obj;
 
-            if(user.ContainsKey("TaxRegime"))
+            if (user.ContainsKey("TaxRegime"))
                 newUser = user.ToObject<Client>();
-            else 
+            else
                 newUser = user.ToObject<Employee>();
 
             listUsers.Add(newUser);
@@ -94,12 +94,37 @@ public static class Storage
         listUsers.Remove(userToDelete);
 
         JsonSerializerSettings settings = new JsonSerializerSettings { Formatting = Formatting.Indented };
-        
+
         string json = JsonConvert.SerializeObject(listUsers, settings);
 
         File.WriteAllText(filePath, json);
 
         return "Success";
     }
+
+    public static bool IsUserIDTaken(int userID)
+    {
+        string usersInFile = "";
+        if (File.Exists(filePath))
+            usersInFile = File.ReadAllText(filePath);
+
+        var listUsers = JsonConvert.DeserializeObject<List<User>>(usersInFile);
+
+        if (listUsers == null)
+            return false;
+
+        foreach (var existingUser in listUsers)
+        {
+            if (existingUser.GetID() == userID)
+            {
+                return true; 
+                // ID se encuentra en uso
+            }
+        }
+
+        return false; 
+        //  No se encuentra en uso
+    }
+
 
 }
