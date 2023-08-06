@@ -14,13 +14,5 @@
     "Email": "miranda@hotmail.com",
     "Balance": 3150.0,
     "RegisterDate": "2023-08-05T21:36:36.7855031-06:00"
-  },
-  {
-    "TaxRegime": "M",
-    "ID": 2,
-    "Name": "felipe",
-    "Email": "torvals@gmail.com",
-    "Balance": 3060.00,
-    "RegisterDate": "2023-08-05T21:48:07.3428519-06:00"
   }
 ]

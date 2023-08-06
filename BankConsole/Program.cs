@@ -95,7 +95,7 @@ void CreateUser()
         }
         else
         {
-            Console.WriteLine("El saldo debe ser un número decimal positivo.");
+            Console.WriteLine("El saldo debe ser un número positivo.");
         }
     } while (true);
 
@@ -142,8 +142,28 @@ void DeleteUser()
 {
     Console.Clear();
 
-    Console.Write("Ingresa el ID del usuario a eliminar: ");
-    int ID = int.Parse(Console.ReadLine());
+    int ID;
+    bool idValid = false;
+
+    do
+    {
+        Console.Write("Ingresa el ID del usuario a eliminar: ");
+        if (int.TryParse(Console.ReadLine(), out ID) && ID > 0)
+        {
+            if (!Storage.IsUserIDTaken(ID))
+            {
+                Console.WriteLine("El ID no existe. Intentalo nuevamente");
+            }
+            else
+            {
+                idValid = true;
+            }
+        }
+        else
+        {
+            Console.WriteLine("No es un ID valido, intentalo nuevamente");
+        }
+    } while (!idValid);
 
     string result = Storage.DeleteUser(ID);
 
